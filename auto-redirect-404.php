@@ -37,10 +37,10 @@ class WP_404_Auto_Redirect{
     Use WP_404_Auto_Redirect_Ajax;
     Use WP_404_Auto_Redirect_Debug;
     
-    var $engines;
-    var $groups;
-    var $search;
-    var $settings;
+    public $engines;
+    public $groups;
+    public $search;
+    public $settings;
     
     
     /**

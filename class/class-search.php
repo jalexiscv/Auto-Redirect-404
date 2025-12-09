@@ -28,32 +28,21 @@ class WP_404_Auto_Redirect_Search{
         ));
         
         if(!$args['keywords']){
-            
-            return array(
-                'result' => array(
-                    'score' => 0
-                ),
-                'dump' => false
-            );
-            
+            return array('result' => array('score' => 0), 'dump' => false);
         }
+        
+        // Prepare SQL Args
+        $sql_args = array();
         
         // Mode: Post
         if($args['mode'] == 'post'){
             
-            // Post Type Args not set && All Post Types are excluded in settings. Early Stop.
+            // Early Stop checks...
             if(!$args['post_type'] && empty($query['settings']['rules']['include']['post_types'])){
-                
-                return array(
-                    'result' => array(
-                        'score' => 0
-                    ),
-                    'dump' => false
-                );
-                
+                 return array('result' => array('score' => 0), 'dump' => false);
             }
 
-            $sql = "SELECT p.ID, ";
+            $select_score = array();
             
             if(!is_array($args['keywords'])){
                 $args['keywords'] = array($args['keywords']);
@@ -64,194 +53,117 @@ class WP_404_Auto_Redirect_Search{
                 $strlen = strlen($k);
                 
                 if($strlen > 1){
+                    // Left: post_name LIKE 'keyword-%'
+                    $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 2, 0)", $k . '-%');
                     
-                    // Left
-                    $sql .= "
-                    IF(LEFT(LCASE(p.post_name), " . ($strlen + 1) . ") = '" . $k . "-', 2, 0) + ";
+                    // Right: post_name LIKE '%-keyword'
+                    $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 2, 0)", '%-' . $k);
                     
-                    // Right
-                    $sql .= "
-                    IF(RIGHT(LCASE(p.post_name), " . ($strlen + 1) . ") = '-" . $k . "', 2, 0) + ";
+                    // Inside: post_name LIKE '%-keyword-%'
+                    $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 2, 0)", '%-' . $k . '-%');
                     
-                    // Inside
-                    $sql .= "
-                    if(INSTR(LCASE(p.post_name), '-" . $k . "-'), 2, 0) + ";
-                    
-                    // Direct
-                    $sql .= "
-                    if(LCASE(p.post_name) = '" . $k . "', 2, 0) + ";
-                    
+                    // Direct: post_name = 'keyword'
+                    $select_score[] = $wpdb->prepare("IF(p.post_name = %s, 2, 0)", $k);
                 }
                 
-                // Wildcard
-                $sql .= "
-                if(INSTR(LCASE(p.post_name), '" . $k . "'), 1, 0) + ";
+                // Wildcard: post_name LIKE '%keyword%'
+                $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 1, 0)", '%' . $k . '%');
                 
             }
 
-            $sql .= "0 AS score FROM " . $wpdb->posts . " AS p";
+            $sql = "SELECT p.ID, (" . implode(' + ', $select_score) . ") AS score FROM " . $wpdb->posts . " AS p";
                 
-                if($query['settings']['rules']['exclude']['post_meta']){
+            if($query['settings']['rules']['exclude']['post_meta']){
+                $sql .= " INNER JOIN " . $wpdb->postmeta . " AS pm ON(p.ID = pm.post_id) WHERE p.post_status = 'publish' AND (pm.meta_key = 'ar404_no_redirect' AND pm.meta_value != '1') ";
+            } else {
+                $sql .= " WHERE p.post_status = 'publish' ";
+            }
                 
-                    $sql .= "
-                    INNER JOIN " . $wpdb->postmeta . " AS pm ON(p.ID = pm.post_id)
-                    WHERE p.post_status = 'publish' AND (pm.meta_key = 'ar404_no_redirect' AND pm.meta_value != '1') ";
-                    
-                }else{
+            if($args['post_type'] != 'any' && $args['post_type'] != array('any')){
                 
-                    $sql .= "
-                    WHERE p.post_status = 'publish' ";
-                    
+                $get_post_types = array();
+                
+                if(!$args['post_type']){
+                    $get_post_types = $query['settings']['rules']['include']['post_types'];
+                } elseif(is_array($args['post_type']) && !empty($args['post_type'])){
+                    $get_post_types = $args['post_type'];
+                } elseif(is_string($args['post_type'])){
+                    $get_post_types[] = $args['post_type'];
                 }
                 
-                if($args['post_type'] != 'any' && $args['post_type'] != array('any')){
-                    
-                    $get_post_types = array();
-                    
-                    // Load Settings Post Types
-                    if(!$args['post_type']){
-                    
-                        $get_post_types = $query['settings']['rules']['include']['post_types'];
-                        
-                    // Post Type Array
-                    }elseif(is_array($args['post_type']) && !empty($args['post_type'])){
-                        
-                        $get_post_types = $args['post_type'];
-                    
-                    // Single Post Type
-                    }elseif(is_string($args['post_type'])){
-                        
-                        $get_post_types[] = $args['post_type'];
-                        
+                if(!empty($get_post_types)){
+                    // Post Types are internal slugs, usually safe, but let's escape them or use IN () placeholders if possible.
+                    // Since they come from settings or code, strict sanitization here.
+                    $post_types_in = array();
+                    foreach($get_post_types as $pt){
+                        $post_types_in[] = "'" . esc_sql($pt) . "'";
                     }
-                    
-                    if(!empty($get_post_types)){
-                    
-                        $post_types = array();
-                        
-                        foreach($get_post_types as $pt){
-                            $post_types[] = "
-                            p.post_type = '" . $pt . "'";
-                        }
-                        
-                        $sql .= 'AND 
-                        (' . implode(' OR ', $post_types) . ')';
-                        
-                    }
-                    
+                    $sql .= " AND p.post_type IN (" . implode(',', $post_types_in) . ")";
                 }
+            }
                 
-            $sql .= " 
-            ORDER BY score DESC, post_modified DESC LIMIT 1";
+            $sql .= " ORDER BY score DESC, post_modified DESC LIMIT 1";
         
         }
         
         // Mode: Term
         elseif($args['mode'] == 'term'){
         
-            // Taxonomy Args not set && All Taxonomies are excluded in settings. Early Stop.
             if(!$args['taxonomy'] && (empty($query['settings']['rules']['include']['taxonomies']) || $query['settings']['rules']['disable']['taxonomies'])){
-                
-                return array(
-                    'result' => array(
-                        'score' => 0
-                    ),
-                    'dump' => false
-                );
-                
+                return array('result' => array('score' => 0), 'dump' => false);
             }
             
-            $sql = "SELECT t.term_id, ";
-            
+            $select_score = array();
+
             if(!is_array($args['keywords'])){
                 $args['keywords'] = array($args['keywords']);
             }
 
             foreach($args['keywords'] as $k){
-                
                 $strlen = strlen($k);
-                
                 if($strlen > 1){
-                    
-                    // Left
-                    $sql .= "
-                    IF(LEFT(LCASE(t.slug), " . ($strlen + 1) . ") = '" . $k . "-', 2, 0) + ";
-                    
-                    // Right
-                    $sql .= "
-                    IF(RIGHT(LCASE(t.slug), " . ($strlen + 1) . ") = '-" . $k . "', 2, 0) + ";
-                    
-                    // Inside
-                    $sql .= "
-                    if(INSTR(LCASE(t.slug), '-" . $k . "-'), 2, 0) + ";
-                    
-                    // Direct
-                    $sql .= "
-                    if(LCASE(t.slug) = '" . $k . "', 2, 0) + ";
-                    
+                    $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 2, 0)", $k . '-%');
+                    $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 2, 0)", '%-' . $k);
+                    $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 2, 0)", '%-' . $k . '-%');
+                    $select_score[] = $wpdb->prepare("IF(t.slug = %s, 2, 0)", $k);
                 }
-                
-                // Wildcard
-                $sql .= "
-                if(INSTR(LCASE(t.slug), '" . $k . "'), 1, 0) + ";
-                
+                $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 1, 0)", '%' . $k . '%');
             }
 
-            $sql .= "
-            0 AS score FROM " . $wpdb->terms . " AS t";
-            
-            $sql .= "
-            INNER JOIN " . $wpdb->term_taxonomy . " AS tt ON(t.term_id = tt.term_id)";
+            $sql = "SELECT t.term_id, (" . implode(' + ', $select_score) . ") AS score FROM " . $wpdb->terms . " AS t";
+            $sql .= " INNER JOIN " . $wpdb->term_taxonomy . " AS tt ON(t.term_id = tt.term_id)";
             
             if($query['settings']['rules']['exclude']['term_meta']){
-                $sql .= "
-                INNER JOIN " . $wpdb->termmeta . " AS tm ON(t.term_id = tm.term_id)";
+                $sql .= " INNER JOIN " . $wpdb->termmeta . " AS tm ON(t.term_id = tm.term_id)";
             }
             
-                if($args['taxonomy'] != 'any' && $args['taxonomy'] != array('any')){
-                    
-                    $get_taxonomies = array();
-                    
-                    // Load Settings Post Types
-                    if(!$args['taxonomy']){
-                    
-                        $get_taxonomies = $query['settings']['rules']['include']['taxonomies'];
-                        
-                    // Post Type Array
-                    }elseif(is_array($args['taxonomy']) && !empty($args['taxonomy'])){
-                        
-                        $get_taxonomies = $args['taxonomy'];
-                    
-                    // Single Post Type
-                    }elseif(is_string($args['taxonomy'])){
-                        
-                        $get_taxonomies[] = $args['taxonomy'];
-                        
-                    }
-                    
-                    if(!empty($get_taxonomies)){
-                    
-                        $taxonomies = array();
-                        
-                        foreach($get_taxonomies as $tax){
-                            $taxonomies[] = "
-                            tt.taxonomy = '" . $tax . "'";
-                        }
-                        
-                        $sql .= '
-                        WHERE (' . implode(' OR ', $taxonomies) . ')';
-                        
-                        if($query['settings']['rules']['exclude']['term_meta']){
-                            $sql .= "
-                            AND (tm.meta_key = 'ar404_no_redirect' AND tm.meta_value != '1')";
-                        }
-                        
-                    }
-                    
+            $sql .= " WHERE 1=1 "; // Simplifies appending ANDs
+
+            if($args['taxonomy'] != 'any' && $args['taxonomy'] != array('any')){
+                
+                $get_taxonomies = array();
+                if(!$args['taxonomy']){
+                    $get_taxonomies = $query['settings']['rules']['include']['taxonomies'];
+                } elseif(is_array($args['taxonomy']) && !empty($args['taxonomy'])){
+                    $get_taxonomies = $args['taxonomy'];
+                } elseif(is_string($args['taxonomy'])){
+                    $get_taxonomies[] = $args['taxonomy'];
                 }
+                
+                if(!empty($get_taxonomies)){
+                    $tax_in = array();
+                    foreach($get_taxonomies as $tax){
+                        $tax_in[] = "'" . esc_sql($tax) . "'";
+                    }
+                    $sql .= " AND tt.taxonomy IN (" . implode(',', $tax_in) . ")";
+                }
+            }
             
-            $sql .= "
-            ORDER BY score DESC LIMIT 1";
+            if($query['settings']['rules']['exclude']['term_meta']){
+                $sql .= " AND (tm.meta_key = 'ar404_no_redirect' AND tm.meta_value != '1')";
+            }
+            
+            $sql .= " ORDER BY score DESC LIMIT 1";
             
         }
         
