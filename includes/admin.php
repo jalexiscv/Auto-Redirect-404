@@ -38,7 +38,7 @@ trait WP_404_Auto_Redirect_Admin{
         
         return array_merge(
             $links, 
-            array('<a href="' . admin_url('options-general.php?page=auto-redirect-404') . '">' . __('Settings', 'auto-redirect-404') . '</a>')
+            array('<a href="' . admin_url('options-general.php?page=auto-redirect-404') . '">' . __('Settings', 'auto-redirect-404-301') . '</a>')
         );
         
     }
@@ -102,10 +102,10 @@ trait WP_404_Auto_Redirect_Admin{
         <hr class="wp-header-end" />
         
         <h2 class="nav-tab-wrapper">
-            <a href="#settings" class="nav-tab nav-tab-active"><?php _e('Settings', 'auto-redirect-404'); ?></a>
-            <a href="#post-types" class="nav-tab"><?php _e('Post Types', 'auto-redirect-404'); ?></a>
-            <a href="#taxonomies" class="nav-tab"><?php _e('Taxonomies', 'auto-redirect-404'); ?></a>
-            <a href="#hooks" class="nav-tab"><?php _e('Engines', 'auto-redirect-404'); ?></a>
+            <a href="#settings" class="nav-tab nav-tab-active"><?php _e('Settings', 'auto-redirect-404-301'); ?></a>
+            <a href="#post-types" class="nav-tab"><?php _e('Post Types', 'auto-redirect-404-301'); ?></a>
+            <a href="#taxonomies" class="nav-tab"><?php _e('Taxonomies', 'auto-redirect-404-301'); ?></a>
+            <a href="#hooks" class="nav-tab"><?php _e('Engines', 'auto-redirect-404-301'); ?></a>
         </h2>
         
         <div id="poststuff">
@@ -130,10 +130,10 @@ trait WP_404_Auto_Redirect_Admin{
                                             <tbody>
                                             
                                                 <tr>
-                                                    <th scope="row"><?php _e('Debug Mode', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Debug Mode', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Debug Mode', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Debug Mode', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_debug">
                                                                 <input 
                                                                     name="ar404_settings[debug]" 
@@ -142,18 +142,18 @@ trait WP_404_Auto_Redirect_Admin{
                                                                     type="checkbox" 
                                                                     <?php checked(1, $settings['debug'], true); ?> 
                                                                     />
-                                                                <?php _e('Enable', 'auto-redirect-404'); ?>
+                                                                <?php _e('Enable', 'auto-redirect-404-301'); ?>
                                                             </label>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Display the Debug Console instead of being redirected. <code>Administrators</code> only.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Display the Debug Console instead of being redirected. <code>Administrators</code> only.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
                                                 <tr>
-                                                    <th scope="row"><?php _e('Expose Headers', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Expose Headers', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Expose Headers', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Expose Headers', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_headers">
                                                                 <input 
                                                                     name="ar404_settings[headers]" 
@@ -162,25 +162,25 @@ trait WP_404_Auto_Redirect_Admin{
                                                                     type="checkbox" 
                                                                     <?php checked(1, $settings['headers'], true); ?> 
                                                                     />
-                                                                <?php _e('Enable', 'auto-redirect-404'); ?>
+                                                                <?php _e('Enable', 'auto-redirect-404-301'); ?>
                                                             </label>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Expose \'Auto-Redirect-404\' headers on 404 pages. <code>Administrators</code> only.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Expose \'Auto-Redirect-404\' headers on 404 pages. <code>Administrators</code> only.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
                                                 <tr>
-                                                    <th scope="row"><?php _e('Log Redirections', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Log Redirections', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         
                                                         <?php if(!WP_DEBUG || !WP_DEBUG_LOG){ ?>
                                                             <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Log Redirections', 'auto-redirect-404'); ?></span></legend>
-                                                                <p class="description"><?php _e('To enable this feature, please set <code>WP_DEBUG</code> and <code>WP_DEBUG_LOG</code> to <code>true</code>. Read the <a href="https://codex.wordpress.org/Editing_wp-config.php#Debug" target="_blank">WP Config documentation</a>.', 'auto-redirect-404'); ?></p>
+                                                            <legend class="screen-reader-text"><span><?php _e('Log Redirections', 'auto-redirect-404-301'); ?></span></legend>
+                                                                <p class="description"><?php _e('To enable this feature, please set <code>WP_DEBUG</code> and <code>WP_DEBUG_LOG</code> to <code>true</code>. Read the <a href="https://codex.wordpress.org/Editing_wp-config.php#Debug" target="_blank">WP Config documentation</a>.', 'auto-redirect-404-301'); ?></p>
                                                             </fieldset>
                                                         <?php }else{ ?>
                                                             <fieldset>
-                                                                <legend class="screen-reader-text"><span><?php _e('Log Redirections', 'auto-redirect-404'); ?></span></legend>
+                                                                <legend class="screen-reader-text"><span><?php _e('Log Redirections', 'auto-redirect-404-301'); ?></span></legend>
                                                                 <label for="ar404_settings_log">
                                                                     <input 
                                                                         name="ar404_settings[log]" 
@@ -189,25 +189,25 @@ trait WP_404_Auto_Redirect_Admin{
                                                                         type="checkbox" 
                                                                         <?php checked(1, $settings['log'], true); ?> 
                                                                         />
-                                                                    <?php _e('Enable', 'auto-redirect-404'); ?>
+                                                                    <?php _e('Enable', 'auto-redirect-404-301'); ?>
                                                                 </label>
                                                             </fieldset>
-                                                            <p class="description"><?php _e('Log redirections in the <code>/wp-content/debug.log</code> file.', 'auto-redirect-404'); ?></p>
+                                                            <p class="description"><?php _e('Log redirections in the <code>/wp-content/debug.log</code> file.', 'auto-redirect-404-301'); ?></p>
                                                         <?php } ?>
                                                         
                                                     </td>
                                                 </tr>
                                                 
                                                 <tr>
-                                                    <th scope="row"><?php _e('Fallback Behavior', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Fallback Behavior', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Fallback Behavior', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Fallback Behavior', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_fallback_type">
                                                                 <select name="ar404_settings[fallback][type]" id="ar404_settings_fallback_type">
-                                                                    <option value="home" <?php if($settings['fallback']['type'] == 'home') echo "selected"; ?>><?php _e('Redirect to Homepage', 'auto-redirect-404'); ?></option>
-                                                                    <option value="custom" <?php if($settings['fallback']['type'] == 'custom') echo "selected"; ?>><?php _e('Custom Redirection', 'auto-redirect-404'); ?></option>
-                                                                    <option value="disabled" <?php if($settings['fallback']['type'] == 'disabled') echo "selected"; ?>><?php _e('Default 404', 'auto-redirect-404'); ?></option>
+                                                                    <option value="home" <?php if($settings['fallback']['type'] == 'home') echo "selected"; ?>><?php _e('Redirect to Homepage', 'auto-redirect-404-301'); ?></option>
+                                                                    <option value="custom" <?php if($settings['fallback']['type'] == 'custom') echo "selected"; ?>><?php _e('Custom Redirection', 'auto-redirect-404-301'); ?></option>
+                                                                    <option value="disabled" <?php if($settings['fallback']['type'] == 'disabled') echo "selected"; ?>><?php _e('Default 404', 'auto-redirect-404-301'); ?></option>
                                                                 </select>
                                                             </label>
                                                             
@@ -235,15 +235,15 @@ trait WP_404_Auto_Redirect_Admin{
                                                             <input name="ar404_settings[fallback][url]" id="ar404_settings_fallback_url" type="text" value="<?php echo $fallback['value']; ?>" class="<?php echo $fallback['class']; ?>" <?php echo $fallback['attr']; ?> />
                                                             
                                                         </fieldset>
-                                                        <p class="description"><?php _e('If nothing similar is found, this behavior will be applied.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('If nothing similar is found, this behavior will be applied.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
                                                 <tr>
-                                                    <th scope="row"><?php _e('Redirections Headers', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Redirections Headers', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Redirections Headers', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Redirections Headers', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_method">
                                                                 <select name="ar404_settings[method]" id="ar404_settings_method">
                                                                     <option value="301" <?php if($settings['method'] == 301) echo "selected"; ?>>301 Status</option>
@@ -251,15 +251,15 @@ trait WP_404_Auto_Redirect_Admin{
                                                                 </select>
                                                             </label>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Learn more about <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes" target="_blank">HTTP headers & redirections</a>.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Learn more about <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes" target="_blank">HTTP headers & redirections</a>.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
                                                 <tr>
-                                                    <th scope="row"><?php _e('Plugin Priority', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Plugin Priority', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Plugin Priority', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Plugin Priority', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_priority">
                                                                 <input 
                                                                     type="number" 
@@ -270,7 +270,7 @@ trait WP_404_Auto_Redirect_Admin{
                                                                     />
                                                             </label>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Advanced users only. Default: <code>999</code>', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Advanced users only. Default: <code>999</code>', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
@@ -290,11 +290,11 @@ trait WP_404_Auto_Redirect_Admin{
                                                         <th scope="row"><?php echo home_url(); ?></th>
                                                         <td>
                                                             <input class="request" type="text" value="/example-url" />
-                                                            <p class="description"><?php _e('Enter the URL you would like to test, starting with <code>/</code>.', 'auto-redirect-404'); ?></p>
+                                                            <p class="description"><?php _e('Enter the URL you would like to test, starting with <code>/</code>.', 'auto-redirect-404-301'); ?></p>
                                                             
                                                             <p class="submit">
                                                                 <input class="nonce" type="hidden" name="nonce" value="<?php echo wp_create_nonce('preview_nonce'); ?>" />
-                                                                <?php submit_button(__('Preview', 'auto-redirect-404'), 'secondary', '', false); ?>
+                                                                <?php submit_button(__('Preview', 'auto-redirect-404-301'), 'secondary', '', false); ?>
                                                                 <span class="loading spinner"></span>
                                                             </p>
                                                         </td>
@@ -319,10 +319,10 @@ trait WP_404_Auto_Redirect_Admin{
                                             <tbody>
                                             
                                                 <tr>
-                                                    <th scope="row"><?php _e('Exclude Post Meta', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Exclude Post Meta', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Post Meta', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Post Meta', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_rules_redirection_exclude_post_meta">
                                                                 <input 
                                                                     name="ar404_settings[rules][exclude][post_meta]" 
@@ -331,18 +331,18 @@ trait WP_404_Auto_Redirect_Admin{
                                                                     value="1" 
                                                                     <?php checked(1, $settings['rules']['exclude']['post_meta'], true); ?>
                                                                     />
-                                                                <?php _e('Enable', 'auto-redirect-404'); ?>
+                                                                <?php _e('Enable', 'auto-redirect-404-301'); ?>
                                                             </label>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Exclude posts with the post meta: <code>ar404_no_redirect = 1</code> from possible redirections.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Exclude posts with the post meta: <code>ar404_no_redirect = 1</code> from possible redirections.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
                                                 <tr>
-                                                    <th scope="row"><?php _e('Exclude Post Type(s)', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Exclude Post Type(s)', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Post Type(s)', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Post Type(s)', 'auto-redirect-404-301'); ?></span></legend>
                                                             <div id="ar404_settings_rules_redirection_exclude_post_types">
                                                                 <?php foreach(get_post_types(array('public' => true), 'objects') as $post_type) { ?>
                                                                     <?php 
@@ -358,7 +358,7 @@ trait WP_404_Auto_Redirect_Admin{
                                                                 <?php } ?>
                                                             </div>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Exclude one or multiple post types from possible redirections.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Exclude one or multiple post types from possible redirections.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
@@ -378,10 +378,10 @@ trait WP_404_Auto_Redirect_Admin{
                                             <tbody>
                                             
                                                 <tr>
-                                                    <th scope="row"><?php _e('Disable Taxonomy Redirection', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Disable Taxonomy Redirection', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Disable Taxonomy Redirection', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Disable Taxonomy Redirection', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_rules_redirection_disable_taxonomies">
                                                                 <input 
                                                                     name="ar404_settings[rules][disable][taxonomies]" 
@@ -390,18 +390,18 @@ trait WP_404_Auto_Redirect_Admin{
                                                                     value="1" 
                                                                     <?php checked(1, $settings['rules']['disable']['taxonomies'], true); ?>
                                                                     />
-                                                                <?php _e('Disable', 'auto-redirect-404'); ?>
+                                                                <?php _e('Disable', 'auto-redirect-404-301'); ?>
                                                             </label>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Never redirect to terms archives.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Never redirect to terms archives.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                             
                                                 <tr class="ar404_settings_taxonomies">
-                                                    <th scope="row"><?php _e('Exclude Term Meta', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Exclude Term Meta', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Term Meta', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Term Meta', 'auto-redirect-404-301'); ?></span></legend>
                                                             <label for="ar404_settings_rules_redirection_exclude_term_meta">
                                                                 <input 
                                                                     name="ar404_settings[rules][exclude][term_meta]" 
@@ -410,18 +410,18 @@ trait WP_404_Auto_Redirect_Admin{
                                                                     value="1" 
                                                                     <?php checked(1, $settings['rules']['exclude']['term_meta'], true); ?>
                                                                     />
-                                                                <?php _e('Enable', 'auto-redirect-404'); ?>
+                                                                <?php _e('Enable', 'auto-redirect-404-301'); ?>
                                                             </label>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Exclude terms with the term meta: <code>ar404_no_redirect = 1</code> from possible redirections.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Exclude terms with the term meta: <code>ar404_no_redirect = 1</code> from possible redirections.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
                                                 <tr class="ar404_settings_taxonomies">
-                                                    <th scope="row"><?php _e('Exclude Taxonomie(s)', 'auto-redirect-404'); ?></th>
+                                                    <th scope="row"><?php _e('Exclude Taxonomie(s)', 'auto-redirect-404-301'); ?></th>
                                                     <td>
                                                         <fieldset>
-                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Taxonomie(s)', 'auto-redirect-404'); ?></span></legend>
+                                                            <legend class="screen-reader-text"><span><?php _e('Exclude Taxonomie(s)', 'auto-redirect-404-301'); ?></span></legend>
                                                             <div id="ar404_settings_rules_redirection_exclude_taxonomies">
                                                                 <?php foreach(get_taxonomies(array('public' => true), 'objects') as $taxonomy) { ?>
                                                                     <?php 
@@ -437,7 +437,7 @@ trait WP_404_Auto_Redirect_Admin{
                                                                 <?php } ?>
                                                             </div>
                                                         </fieldset>
-                                                        <p class="description"><?php _e('Exclude one or multiple taxonomies from possible redirections.', 'auto-redirect-404'); ?></p>
+                                                        <p class="description"><?php _e('Exclude one or multiple taxonomies from possible redirections.', 'auto-redirect-404-301'); ?></p>
                                                     </td>
                                                 </tr>
                                                 
@@ -591,7 +591,7 @@ trait WP_404_Auto_Redirect_Admin{
                         <div class="postbox">
                             <div class="inside">
                                 <p class="submit">
-                                    <?php submit_button(__('Save Settings', 'auto-redirect-404'), 'primary', '', false); ?>
+                                    <?php submit_button(__('Save Settings', 'auto-redirect-404-301'), 'primary', '', false); ?>
                                 </p>
                             </div>
                         </div>
@@ -608,26 +608,26 @@ trait WP_404_Auto_Redirect_Admin{
                             <div class="inside">
                                 <img src="<?php echo plugins_url('assets/logo.png', AR404_FILE); ?>" class="logo" />
 
-                                <p><?php _e('Automatically redirect 404 pages to similar posts based on Title, Post Types & Taxonomies.', 'auto-redirect-404'); ?></p>
+                                <p><?php _e('Automatically redirect 404 pages to similar posts based on Title, Post Types & Taxonomies.', 'auto-redirect-404-301'); ?></p>
                                 
-                                <h3><?php _e('Rate us', 'auto-redirect-404'); ?></h3>
+                                <h3><?php _e('Rate us', 'auto-redirect-404-301'); ?></h3>
                                 
-                                <p><?php _e('Enjoying this plugin? Please rate us. It\'s always much appreciated!', 'auto-redirect-404'); ?></p>
-                                <p><a href="https://wordpress.org/support/plugin/auto-redirect-404-to-similar-post/reviews/#new-post" target="_blank" class="button"><?php _e('Rate this plugin', 'auto-redirect-404'); ?></a></p>
+                                <p><?php _e('Enjoying this plugin? Please rate us. It\'s always much appreciated!', 'auto-redirect-404-301'); ?></p>
+                                <p><a href="https://wordpress.org/support/plugin/auto-redirect-404-to-similar-post/reviews/#new-post" target="_blank" class="button"><?php _e('Rate this plugin', 'auto-redirect-404-301'); ?></a></p>
                                 
                                 <?php if(!ar404_is_empty($plugin_data['Version'])){ ?>
                                 
-                                    <h3><?php _e('Changelog', 'auto-redirect-404'); ?></h3>
-                                    <p><?php _e('See what\'s new in', 'auto-redirect-404'); ?> <a href="https://wordpress.org/plugins/auto-redirect-404-to-similar-post/#developers" target="_blank" style="text-decoration:none;">version <?php echo $plugin_data['Version']; ?></a>.</p>
+                                    <h3><?php _e('Changelog', 'auto-redirect-404-301'); ?></h3>
+                                    <p><?php _e('See what\'s new in', 'auto-redirect-404-301'); ?> <a href="https://wordpress.org/plugins/auto-redirect-404-to-similar-post/#developers" target="_blank" style="text-decoration:none;">version <?php echo $plugin_data['Version']; ?></a>.</p>
                                     
                                 <?php } ?>
                                 
-                                <h3><?php _e('Resources', 'auto-redirect-404'); ?></h3>
+                                <h3><?php _e('Resources', 'auto-redirect-404-301'); ?></h3>
                                 
                                 <ul>
-                                    <li><a href="https://wordpress.org/plugins/auto-redirect-404-to-similar-post/" target="_blank" style="text-decoration:none;"><i class="dashicons dashicons-admin-home"></i> <?php _e('Website', 'auto-redirect-404'); ?></a></li>
-                                    <li><a href="https://wordpress.org/plugins/auto-redirect-404-to-similar-post/" target="_blank" style="text-decoration:none;"><i class="dashicons dashicons-sos"></i> <?php _e('Documentation', 'auto-redirect-404'); ?></a></li>
-                                    <li><a href="https://wordpress.org/support/plugin/auto-redirect-404-to-similar-post" target="_blank" style="text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> <?php _e('Support', 'auto-redirect-404'); ?></a></li>
+                                    <li><a href="https://wordpress.org/plugins/auto-redirect-404-to-similar-post/" target="_blank" style="text-decoration:none;"><i class="dashicons dashicons-admin-home"></i> <?php _e('Website', 'auto-redirect-404-301'); ?></a></li>
+                                    <li><a href="https://wordpress.org/plugins/auto-redirect-404-to-similar-post/" target="_blank" style="text-decoration:none;"><i class="dashicons dashicons-sos"></i> <?php _e('Documentation', 'auto-redirect-404-301'); ?></a></li>
+                                    <li><a href="https://wordpress.org/support/plugin/auto-redirect-404-to-similar-post" target="_blank" style="text-decoration:none;"><i class="dashicons dashicons-editor-help"></i> <?php _e('Support', 'auto-redirect-404-301'); ?></a></li>
                                 </ul>
                             </div>
                             

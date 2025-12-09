@@ -31,7 +31,7 @@ function ar404_set_result($result, $engine){
         $result = wp_parse_args($result, array(
             'url'   => false,
             'score' => 0,
-            'why'   => __("No reason.", 'auto-redirect-404'),
+            'why'   => __("No reason.", 'auto-redirect-404-301'),
         ));
         
     }else{
