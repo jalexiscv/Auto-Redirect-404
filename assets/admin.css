@@ -1,0 +1,92 @@
+#ar404_settings a.nav-tab{
+	outline:none;
+	box-shadow:none;
+	text-decoration:none;
+    transition-property:none;
+}
+
+#ar404_settings h2.nav-tab-wrapper{
+	margin-bottom:5px !important;
+	margin-top:20px !important;
+	display:block;
+}
+
+#ar404_settings .nav-tab-panel:not(#settings){
+	display:none;
+}
+
+#ar404_settings #ar404_settings_fallback_url{
+    width:330px;
+}
+
+#ar404_settings #ar404_settings_fallback_url.disabled{
+    pointer-events:none;
+}
+
+#ar404_settings #ar404_settings_priority{
+    width: 60px;
+}
+
+#ar404_settings #ar404_settings_rules_redirection_exclude_post_types,
+#ar404_settings #ar404_settings_rules_redirection_exclude_taxonomies{
+    display:block;
+    border:1px solid #ddd;
+    max-width:300px;
+    max-height:148px;
+    overflow:auto;
+}
+
+#ar404_settings #ar404_settings_rules_redirection_exclude_post_types input,
+#ar404_settings #ar404_settings_rules_redirection_exclude_taxonomies input{
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#ar404_settings #ar404_settings_rules_redirection_exclude_post_types label,
+#ar404_settings #ar404_settings_rules_redirection_exclude_taxonomies label{
+    display:block;
+    padding:5px;
+    margin:0 !important;
+    position:relative;
+}
+
+#ar404_settings #ar404_settings_rules_redirection_exclude_post_types label:hover,
+#ar404_settings #ar404_settings_rules_redirection_exclude_taxonomies label:hover{
+    background:#f1f1f1;
+}
+
+#ar404_settings #ar404_settings_rules_redirection_exclude_post_types input:checked + label,
+#ar404_settings #ar404_settings_rules_redirection_exclude_taxonomies input:checked + label{
+    background:#0073aa;
+    color:#c6d6dd;
+}
+
+#ar404_settings #ar404_settings_rules_redirection_exclude_post_types input:checked + label:after,
+#ar404_settings #ar404_settings_rules_redirection_exclude_taxonomies input:checked + label:after{
+    position: absolute;
+    content: "Excluded";
+    right: 5px;
+    font-size: 10px;
+}
+
+#ar404_settings #ar404_settings_redirection_preview .request{
+    width:500px;
+}
+
+#ar404_settings p.submit{
+    padding:0;
+    margin-top:15px;
+}
+
+#ar404_settings p.submit .loading.spinner{
+    float:none;
+    vertical-align:top;
+}
+
+#ar404_settings #postbox-container-1 .logo{
+    max-width:100%;
+    height:auto;
+    margin:20px auto 30px;
+    display:block;
+}
