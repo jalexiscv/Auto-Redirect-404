@@ -1,0 +1,41 @@
+name: Build and Attach Plugin ZIP
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.0'
+
+    - name: Build ZIP
+      run: |
+        # Define the plugin slug
+        SLUG="auto-redirect-404-similar-post"
+        
+        # Create a directory for the build
+        mkdir -p build/$SLUG
+        
+        # Copy files to the build directory, excluding dev files
+        rsync -rc --exclude-from='.distignore' ./ build/$SLUG/
+        
+        # Go into build directory and zip
+        cd build
+        zip -r ../$SLUG.zip $SLUG
+        
+    - name: Upload Release Asset
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: auto-redirect-404-similar-post.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
