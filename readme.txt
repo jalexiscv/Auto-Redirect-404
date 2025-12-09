@@ -3,9 +3,9 @@ Contributors: jalexiscv
 Donate link: https://alterplex.net
 Tags: SEO, 404, Redirect, 301, Similar, Related, Search, Broken Link, Webmaster Tools, Google
 Requires at least: 4.0
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -377,6 +377,10 @@ function my_404_after_redirect($query){
 5. Front: Debug Console
 
 == Changelog ==
+
+= 1.0.9 =
+* Fix: Compliance with WordPress.org repository guidelines (Headers & Licensing)
+* Chore: Repository file structure cleanup
 
 = 1.0.8 =
 * Security: Refactored search engine queries to use placeholders and WP prepare()
