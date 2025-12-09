@@ -94,11 +94,8 @@ class WP_404_Auto_Redirect_Search{
                 if(!empty($get_post_types)){
                     // Post Types are internal slugs, usually safe, but let's escape them or use IN () placeholders if possible.
                     // Since they come from settings or code, strict sanitization here.
-                    $post_types_in = array();
-                    foreach($get_post_types as $pt){
-                        $post_types_in[] = "'" . esc_sql($pt) . "'";
-                    }
-                    $sql .= " AND p.post_type IN (" . implode(',', $post_types_in) . ")";
+                    $placeholders = implode(',', array_fill(0, count($get_post_types), '%s'));
+                    $sql .= $wpdb->prepare(" AND p.post_type IN ($placeholders)", $get_post_types);
                 }
             }
                 
@@ -151,11 +148,8 @@ class WP_404_Auto_Redirect_Search{
                 }
                 
                 if(!empty($get_taxonomies)){
-                    $tax_in = array();
-                    foreach($get_taxonomies as $tax){
-                        $tax_in[] = "'" . esc_sql($tax) . "'";
-                    }
-                    $sql .= " AND tt.taxonomy IN (" . implode(',', $tax_in) . ")";
+                    $placeholders = implode(',', array_fill(0, count($get_taxonomies), '%s'));
+                    $sql .= $wpdb->prepare(" AND tt.taxonomy IN ($placeholders)", $get_taxonomies);
                 }
             }
             

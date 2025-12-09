@@ -28,7 +28,7 @@ trait WP_404_Auto_Redirect_Ajax{
         }
         
         // get request
-        $request = esc_url($_POST['request']);
+        $request = isset($_POST['request']) ? esc_url_raw($_POST['request']) : '';
         
         // check request
         if(empty($request)){
