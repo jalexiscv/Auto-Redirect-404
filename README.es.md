@@ -3,95 +3,96 @@
 [![Read in English](https://img.shields.io/badge/Read_in-English-blue)](README.md)
 ![Licencia](https://img.shields.io/badge/license-GPLv2-blue.svg)
 ![Versión](https://img.shields.io/badge/version-1.0.6-green.svg)
+![Probado hasta](https://img.shields.io/badge/tested_up_to-WordPress_6.8-brightgreen.svg)
 
-**Redirecciona automáticamente cualquier página 404 a una entrada similar basándose en el Título, Tipo de Post y Taxonomías usando redirecciones 301 o 302.**
-
----
-
-## Descripción
-
-¡Bienvenido a **Auto Redirect 404**!
-
-Este plugin redirecciona automáticamente las páginas de error 404 a publicaciones similares basándose en el Título, Tipos de Post y Taxonomías. Si no se encuentra nada similar, los visitantes serán redirigidos a la página de inicio o a una URL personalizada.
-
-### Características
-*   **Detección Automática de 404**: Captura los errores 404 inmediatamente.
-*   **Búsqueda Inteligente**: Encuentra publicaciones similares basándose en:
-    *   Título
-    *   Tipo de Post (Post Type)
-    *   Taxonomía
-*   **Comportamiento por Defecto (Fallback)**: Si no se encuentra coincidencia:
-    *   Redirigir al Inicio (Homepage)
-    *   Redirigir a una URL personalizada
-    *   Mostrar la página 404 por defecto
-*   **Estado de Redirección**: Elige entre redirecciones **301 (Permanente)** o **302 (Temporal)**.
-*   **Exclusiones**:
-    *   Excluir Tipos de Post específicos.
-    *   Excluir Taxonomías específicas.
-    *   Excluir Entradas/Términos mediante meta campos personalizados.
-*   **Depuración y Vista Previa**:
-    *   Consola de Depuración (para Administradores).
-    *   Vista previa de redirecciones desde el Panel de Administración.
-
-### Nuevas Características (v1.0+)
-*   **Motores y Grupos**: Personaliza tu propia lógica de búsqueda y coincidencia.
-*   **Registro (Logging)**: Registra redirecciones en `/wp-content/debug.log`.
-*   **Cabeceras**: Expone cabeceras `Auto-Redirect-404` para depuración.
+**La solución definitiva para gestionar errores 404 en WordPress. Redirecciona automáticamente a los visitantes perdidos hacia contenido similar utilizando algoritmos de coincidencia inteligente.**
 
 ---
 
-## Instalación
+## 📖 Introducción
 
-1.  Sube los archivos del plugin al directorio `/wp-content/plugins/auto-redirect-404-similar-post`, o instálalo directamente desde la pantalla de plugins de WordPress.
-2.  Activa el plugin desde la pantalla 'Plugins' en WordPress.
-3.  Ve a **Ajustes > Auto Redirect 404** para configurar tus preferencias.
-4.  ¡Listo! Intenta acceder a una URL inexistente para probarlo.
+**Auto Redirect 404** es un plugin de WordPress robusto y orientado al rendimiento, diseñado para mejorar la Experiencia de Usuario (UX) y el Posicionamiento en Buscadores (SEO). Cuando un visitante encuentra un error de "Página no encontrada" (404), este plugin analiza la URL solicitada y redirige inteligentemente al usuario hacia el contenido existente más relevante de su sitio.
 
----
-
-## API para Desarrolladores
-
-Auto Redirect 404 utiliza lógica de cachés y grupos para extensibilidad.
-
-### Crear un Grupo Personalizado
-```php
-add_action('ar404/search/init', 'my_404_group');
-function my_404_group($query){
-    ar404_register_group(array(
-        'name' => 'Mi Grupo',
-        'slug' => 'my_group',
-        'engines' => array('default_post', 'default_fix_url')
-    ));
-}
-```
-
-### Crear un Motor Personalizado
-```php
-add_action('ar404/search/init', 'my_404_group_engine');
-function my_404_group_engine($query){
-    ar404_register_engine(array(
-        'name' => 'Mi Motor',
-        'slug' => 'my_engine',
-        'weight' => 100,
-        'primary' => true
-    ));
-    // Lógica de implementación vía filtro 'ar404/search/engine/my_engine'...
-}
-```
+En lugar de perder un visitante en un callejón sin salida, Auto Redirect 404 lo guía suavemente hacia la entrada, página o término que probablemente estaba buscando, reduciendo la tasa de rebote y reteniendo el tráfico.
 
 ---
 
-## Preguntas Frecuentes
+## 🚀 Características Clave
 
-**¿Es compatible con otros plugins de redirección?**
-¡Sí! Funciona junto con Redirection, RankMath, Yoast, etc. Si no se encuentra una redirección manual, Auto Redirect 404 toma el control.
+### 🧠 Motor de Coincidencia Inteligente
+El núcleo de Auto Redirect 404 es su avanzado algoritmo de búsqueda, que considera:
+*   **Análisis de Título**: Escanea sus publicaciones en busca de palabras clave encontradas en la URL 404.
+*   **Contexto de Tipo de Post**: Detecta si la URL sigue una estructura de tipo de publicación específica.
+*   **Lógica de Taxonomía**: Identifica categorías o etiquetas potenciales para encontrar contenido relacionado.
+
+### ⚙️ Comportamiento Personalizable (Fallback)
+Usted tiene control total sobre qué sucede cuando no se encuentra contenido similar:
+*   **Redirigir al Inicio**: Envíe a los visitantes a su página principal.
+*   **URL Personalizada**: Defina una página de destino específica (ej. una página de búsqueda personalizada o mapa del sitio).
+*   **404 Predeterminado**: Mantenga el comportamiento estándar si lo prefiere.
+
+### 🛠️ Capacidades Técnicas
+*   **Códigos de Estado**: Elija entre **301 (Movido Permanentemente)** para valor SEO o **302 (Encontrado)** para cambios temporales.
+*   **Reglas de Exclusión**: Evite que Tipos de Post o Taxonomías específicas sean objetivos de redirección.
+*   **Control Meta**: Use el campo meta `ar404_no_redirect` para excluir entradas o términos específicos individualmente.
+*   **Registro (Logging)**: Mantenga un rastro de auditoría detallado de cada redirección en su archivo `/wp-content/debug.log`.
+*   **No Intrusivo**: Optimizado para velocidad, no guarda **ningún** dato inútil en sus tablas de base de datos.
 
 ---
 
-## Registro de Cambios (Changelog)
-**1.0.6**
-*   Corrección: Escapado del valor de prioridad en ajustes.
-*   Corrección: Deprecación de creación de propiedades dinámicas en PHP 8.3.
-*   Actualización: Versión probada hasta WordPress 6.8.
+## 💾 Instalación y Configuración
 
-*(Ver registro completo en `readme.txt`)*
+1.  **Descargar e Instalar**: 
+    *   Suba la carpeta del plugin a `/wp-content/plugins/auto-redirect-404-similar-post`.
+    *   O instálelo directamente a través del panel de Plugins de WordPress.
+2.  **Activar**: Habilite el plugin.
+3.  **Configurar**: Navegue a **Ajustes > Auto Redirect 404**.
+    *   Establezca su comportamiento de "Fallback" preferido.
+    *   Revise la configuración de exclusiones si es necesario.
+4.  **Probar**: Visite una URL inexistente (ej. `sudominio.com/probando-pagina-perdida`) para ver la magia en acción.
+
+---
+
+## 💻 API para Desarrolladores
+
+Para usuarios avanzados y desarrolladores, Auto Redirect 404 ofrece una API completa para engancharse (hooks) a su lógica, crear motores de búsqueda personalizados o modificar comportamientos de redirección programáticamente.
+
+👉 **[Leer la Documentación Completa para Desarrolladores](docs/DEVELOPER.es.md)**
+
+*   Crear Grupos de Búsqueda Personalizados
+*   Registrar Nuevos Motores de Búsqueda
+*   Modificar Secuencias de Ejecución
+*   Hooks para Eventos de Redirección
+
+---
+
+## 🤝 Soporte y Contribuciones
+
+¡Damos la bienvenida a contribuciones para mejorar Auto Redirect 404!
+Por favor revise nuestras **[Guías de Contribución](CONTRIBUTING.md)** (Próximamente).
+
+Si encuentra algún problema, por favor revise los [Foros de Soporte](https://wordpress.org/support/plugin/auto-redirect-404-similar-post/) o abra un issue en GitHub.
+
+---
+
+## 👨‍💻 Autor
+
+**Jose Alexis Correa Valencia**  
+*Full Stack Developer & Software Architect*
+
+*   **GitHub**: [@jalexiscv](https://github.com/jalexiscv)
+*   **Email**: jalexiscv@gmail.com
+*   **Ubicación**: Colombia
+
+---
+
+## ❤️ Donaciones
+
+Si este plugin le ha ayudado a usted o a su negocio, por favor considere hacer una pequeña donación para apoyar su desarrollo continuo y mantenimiento.
+
+| Método | Detalles |
+| :--- | :--- |
+| **PayPal** | [jalexiscv@gmail.com](https://paypal.me/jalexiscv) |
+| **Nequi (Colombia)** | `3117977281` |
+
+*¡Gracias por su apoyo!*
