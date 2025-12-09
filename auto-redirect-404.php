@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Auto Redirect 404
+ * Plugin Name: Auto Redirect 404-301
  * Plugin URI:  https://github.com/jalexiscv
  * Description: Automatically Redirect any 404 page to a Similar Post based on the Title, Post Type & Taxonomy using 301 Redirects!
  * Version: 	1.0.7

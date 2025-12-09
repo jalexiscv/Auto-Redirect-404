@@ -1,4 +1,4 @@
-# Auto Redirect 404
+# Auto Redirect 404-301
 
 [![Read in Spanish](https://img.shields.io/badge/Leer_en-Español-red)](README.es.md)
 ![License](https://img.shields.io/badge/license-GPLv2-blue.svg)

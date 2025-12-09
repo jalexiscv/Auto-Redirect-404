@@ -1,4 +1,4 @@
-=== Auto Redirect 404 ===
+=== Auto Redirect 404-301 ===
 Contributors: jalexiscv
 Donate link: https://alterplex.net
 Tags: SEO, 404, Redirect, 301, Similar, Related, Search, Broken Link, Webmaster Tools, Google
