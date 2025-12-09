@@ -22,7 +22,7 @@ trait WP_404_Auto_Redirect_Debug{
         $title = 'Fallback Redirection disabled. Displaying 404.';
         
         if(isset($query['redirect']['url']) && !empty($query['redirect']['url'])){
-            $title = 'Redirection: ' . "<a href='" . $query['redirect']['url'] . "'>" . $query['redirect']['url'] . "</a>" . ' (' . $query['settings']['method'] . ' Headers)';
+            $title = 'Redirection: ' . "<a href='" . esc_url($query['redirect']['url']) . "'>" . esc_html($query['redirect']['url']) . "</a>" . ' (' . esc_html($query['settings']['method']) . ' Headers)';
         }
         
         ?>
@@ -41,19 +41,19 @@ trait WP_404_Auto_Redirect_Debug{
         
             <?php if(!$query['preview']){ ?>
                 <div class="logo">
-                    <img src="<?php echo plugins_url('../assets/logo.png', __FILE__); ?>" class="logo" />
+                    <img src="<?php echo esc_url(plugins_url('../assets/logo.png', __FILE__)); ?>" class="logo" />
                 </div>
                 <h2>Auto Redirect 404 to Similar Post</h2>
-                <p>This is the <strong>debug console</strong> of Auto Redirect 404 to Similar Post Plugin which is only visible to administrators. Head over your <a href="<?php echo admin_url('options-general.php?page=auto-redirect-404'); ?>">settings page</a> if you would like to disable it.</p>
+                <p>This is the <strong>debug console</strong> of Auto Redirect 404 to Similar Post Plugin which is only visible to administrators. Head over your <a href="<?php echo esc_url(admin_url('options-general.php?page=auto-redirect-404')); ?>">settings page</a> if you would like to disable it.</p>
                 <hr />
             <?php } ?>
             
             <h3>Summary:</h3>
             
-            <pre>Requested URL: <a href="<?php echo home_url(); ?><?php echo $query['request']['url']; ?>"><?php echo home_url(); ?><?php echo $query['request']['url']; ?></a><br />
-<?php echo $title; ?><br />
-Engine: <?php echo $query['redirect']['engine']; ?><br />
-Details: <?php echo $query['redirect']['why']; ?></pre>
+            <pre>Requested URL: <a href="<?php echo esc_url(home_url() . $query['request']['url']); ?>"><?php echo esc_url(home_url()); ?><?php echo esc_html($query['request']['url']); ?></a><br />
+<?php echo wp_kses_post($title); ?><br />
+Engine: <?php echo esc_html($query['redirect']['engine']); ?><br />
+Details: <?php echo esc_html($query['redirect']['why']); ?></pre>
             
             <h3>Advanced:</h3>
             <pre><?php print_r($query); ?></pre>
