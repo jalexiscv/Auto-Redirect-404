@@ -92,7 +92,7 @@ Si este plugin le ha ayudado a usted o a su negocio, por favor considere hacer u
 
 | Método | Detalles |
 | :--- | :--- |
-| **PayPal** | [jalexiscv@gmail.com](https://paypal.me/jalexiscv) |
+| **PayPal** | [jalexiscv@gmail.com](https://www.paypal.com/paypalme/anssible) |
 | **Nequi (Colombia)** | `3117977281` |
 
 *¡Gracias por su apoyo!*
