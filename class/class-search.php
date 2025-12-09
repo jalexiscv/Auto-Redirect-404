@@ -32,7 +32,7 @@ class WP_404_Auto_Redirect_Search{
         }
         
         // Prepare SQL Args
-        $sql_args = array();
+        $query_params = array();
         
         // Mode: Post
         if($args['mode'] == 'post'){
@@ -54,20 +54,25 @@ class WP_404_Auto_Redirect_Search{
                 
                 if($strlen > 1){
                     // Left: post_name LIKE 'keyword-%'
-                    $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 2, 0)", $k . '-%');
+                    $select_score[] = "IF(p.post_name LIKE %s, 2, 0)";
+                    $query_params[] = $k . '-%';
                     
                     // Right: post_name LIKE '%-keyword'
-                    $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 2, 0)", '%-' . $k);
+                    $select_score[] = "IF(p.post_name LIKE %s, 2, 0)";
+                    $query_params[] = '%-' . $k;
                     
                     // Inside: post_name LIKE '%-keyword-%'
-                    $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 2, 0)", '%-' . $k . '-%');
+                    $select_score[] = "IF(p.post_name LIKE %s, 2, 0)";
+                    $query_params[] = '%-' . $k . '-%';
                     
                     // Direct: post_name = 'keyword'
-                    $select_score[] = $wpdb->prepare("IF(p.post_name = %s, 2, 0)", $k);
+                    $select_score[] = "IF(p.post_name = %s, 2, 0)";
+                    $query_params[] = $k;
                 }
                 
                 // Wildcard: post_name LIKE '%keyword%'
-                $select_score[] = $wpdb->prepare("IF(p.post_name LIKE %s, 1, 0)", '%' . $k . '%');
+                $select_score[] = "IF(p.post_name LIKE %s, 1, 0)";
+                $query_params[] = '%' . $k . '%';
                 
             }
 
@@ -92,10 +97,11 @@ class WP_404_Auto_Redirect_Search{
                 }
                 
                 if(!empty($get_post_types)){
-                    // Post Types are internal slugs, usually safe, but let's escape them or use IN () placeholders if possible.
-                    // Since they come from settings or code, strict sanitization here.
                     $placeholders = implode(',', array_fill(0, count($get_post_types), '%s'));
-                    $sql .= $wpdb->prepare(" AND p.post_type IN ($placeholders)", $get_post_types);
+                    $sql .= " AND p.post_type IN ($placeholders)";
+                    foreach($get_post_types as $pt) {
+                        $query_params[] = $pt;
+                    }
                 }
             }
                 
@@ -119,12 +125,20 @@ class WP_404_Auto_Redirect_Search{
             foreach($args['keywords'] as $k){
                 $strlen = strlen($k);
                 if($strlen > 1){
-                    $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 2, 0)", $k . '-%');
-                    $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 2, 0)", '%-' . $k);
-                    $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 2, 0)", '%-' . $k . '-%');
-                    $select_score[] = $wpdb->prepare("IF(t.slug = %s, 2, 0)", $k);
+                    $select_score[] = "IF(t.slug LIKE %s, 2, 0)";
+                    $query_params[] = $k . '-%';
+                    
+                    $select_score[] = "IF(t.slug LIKE %s, 2, 0)";
+                    $query_params[] = '%-' . $k;
+                    
+                    $select_score[] = "IF(t.slug LIKE %s, 2, 0)";
+                    $query_params[] = '%-' . $k . '-%';
+                    
+                    $select_score[] = "IF(t.slug = %s, 2, 0)";
+                    $query_params[] = $k;
                 }
-                $select_score[] = $wpdb->prepare("IF(t.slug LIKE %s, 1, 0)", '%' . $k . '%');
+                $select_score[] = "IF(t.slug LIKE %s, 1, 0)";
+                $query_params[] = '%' . $k . '%';
             }
 
             $sql = "SELECT t.term_id, (" . implode(' + ', $select_score) . ") AS score FROM " . $wpdb->terms . " AS t";
@@ -134,7 +148,7 @@ class WP_404_Auto_Redirect_Search{
                 $sql .= " INNER JOIN " . $wpdb->termmeta . " AS tm ON(t.term_id = tm.term_id)";
             }
             
-            $sql .= " WHERE 1=1 "; // Simplifies appending ANDs
+            $sql .= " WHERE 1=1 ";
 
             if($args['taxonomy'] != 'any' && $args['taxonomy'] != array('any')){
                 
@@ -149,7 +163,10 @@ class WP_404_Auto_Redirect_Search{
                 
                 if(!empty($get_taxonomies)){
                     $placeholders = implode(',', array_fill(0, count($get_taxonomies), '%s'));
-                    $sql .= $wpdb->prepare(" AND tt.taxonomy IN ($placeholders)", $get_taxonomies);
+                    $sql .= " AND tt.taxonomy IN ($placeholders)";
+                    foreach($get_taxonomies as $tax) {
+                        $query_params[] = $tax;
+                    }
                 }
             }
             
@@ -161,7 +178,12 @@ class WP_404_Auto_Redirect_Search{
             
         }
         
-        $search = $wpdb->get_row($sql, 'ARRAY_A');
+        // Execute Prepared Query
+        if(!empty($query_params)){
+            $search = $wpdb->get_row($wpdb->prepare($sql, $query_params), 'ARRAY_A');
+        } else {
+            $search = $wpdb->get_row($sql, 'ARRAY_A');
+        }
         
         // init Result
         $result = array();

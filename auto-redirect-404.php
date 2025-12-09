@@ -132,24 +132,24 @@ class WP_404_Auto_Redirect{
     function run(){
         
         // is 404
-        if(!is_404() || wp_doing_ajax() || is_admin() || ar404_is_empty($_SERVER['REQUEST_URI'])){
+        if(!is_404() || wp_doing_ajax() || is_admin() || !isset($_SERVER['REQUEST_URI']) || ar404_is_empty($_SERVER['REQUEST_URI'])){
             return;
         }
         
         // admin ajax
-        if(!ar404_is_empty($_SERVER['SCRIPT_URI']) && $_SERVER['SCRIPT_URI'] == admin_url('admin-ajax.php')){
+        if(isset($_SERVER['SCRIPT_URI']) && !ar404_is_empty($_SERVER['SCRIPT_URI']) && sanitize_url(wp_unslash($_SERVER['SCRIPT_URI'])) == admin_url('admin-ajax.php')){
             return;
         }
         
         // xml request
-        if(!ar404_is_empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'){
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !ar404_is_empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower(sanitize_text_field(wp_unslash($_SERVER['HTTP_X_REQUESTED_WITH']))) == 'xmlhttprequest'){
             return;
         }
         
         // Sanitize Request
-        $request = esc_url_raw($_SERVER['REQUEST_URI']); // sanitize url
-        $request = urldecode($request);                  // decode to remove %20 etc...
-        $request = esc_html($request);                   // escape output for display
+        $request = esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])); // sanitize url
+        $request = urldecode($request);                              // decode to remove %20 etc...
+        $request = esc_html($request);                               // escape output for display
         
         if(empty($request)){
             return;
@@ -188,7 +188,7 @@ class WP_404_Auto_Redirect{
             'preview'   => $preview,
             'request'   => array(
                 'url'       => $request,
-                'referrer'  => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false,
+                'referrer'  => isset($_SERVER['HTTP_REFERER']) ? esc_url_raw(wp_unslash($_SERVER['HTTP_REFERER'])) : false,
                 'dirname'   => $path['dirname'],
                 'filename'  => $path['filename'],
                 'extension' => (!ar404_is_empty($path['extension']) ? $path['extension'] : ''),
@@ -473,7 +473,7 @@ class WP_404_Auto_Redirect{
             }
             
             if(isset($query['redirect']['why'])){
-                header('Auto-Redirect-404-Why: ' . strip_tags($query['redirect']['why']));
+                header('Auto-Redirect-404-Why: ' . wp_strip_all_tags($query['redirect']['why']));
             }
             
         }
@@ -504,14 +504,14 @@ class WP_404_Auto_Redirect{
         $group = $query['search']['group'];
         $engine = $query['redirect']['engine'];
         $score = $query['redirect']['score'];
-        $why = strip_tags($query['redirect']['why']);
+        $why = wp_strip_all_tags($query['redirect']['why']);
         
         // Cloudflare Fix
         if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])){
-            $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+            $_SERVER['REMOTE_ADDR'] = sanitize_text_field(wp_unslash($_SERVER["HTTP_CF_CONNECTING_IP"]));
         }
         
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '0.0.0.0';
         
         error_log('Auto Redirect 404: ' . $request_url . ' => ' . $redirect . ' (Group: ' . $group . ' | Engine: ' . $engine . ' | Score: ' . $score . ' | Why: ' . $why . ' | IP: ' . $ip . ')');
         

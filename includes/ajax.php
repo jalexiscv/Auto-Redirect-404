@@ -18,7 +18,7 @@ trait WP_404_Auto_Redirect_Ajax{
     function preview(){
         
         // check nonce
-        if(!wp_verify_nonce($_POST['nonce'], 'preview_nonce')){
+        if(!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'preview_nonce')){
             wp_die();
         }
         
@@ -28,7 +28,7 @@ trait WP_404_Auto_Redirect_Ajax{
         }
         
         // get request
-        $request = isset($_POST['request']) ? esc_url_raw($_POST['request']) : '';
+        $request = isset($_POST['request']) ? esc_url_raw(wp_unslash($_POST['request'])) : '';
         
         // check request
         if(empty($request)){
