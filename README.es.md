@@ -2,7 +2,7 @@
 
 [![Read in English](https://img.shields.io/badge/Read_in-English-blue)](README.md)
 ![Licencia](https://img.shields.io/badge/license-GPLv2-blue.svg)
-![Versión](https://img.shields.io/badge/version-1.0.6-green.svg)
+![Versión](https://img.shields.io/badge/version-1.0.7-green.svg)
 ![Probado hasta](https://img.shields.io/badge/tested_up_to-WordPress_6.8-brightgreen.svg)
 
 **La solución definitiva para gestionar errores 404 en WordPress. Redirecciona automáticamente a los visitantes perdidos hacia contenido similar utilizando algoritmos de coincidencia inteligente.**

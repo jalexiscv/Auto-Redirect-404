@@ -5,7 +5,7 @@ Tags: SEO, 404, Redirect, 301, Similar, Related, Search, Broken Link, Webmaster 
 Requires at least: 4.0
 Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -377,6 +377,11 @@ function my_404_after_redirect($query){
 5. Front: Debug Console
 
 == Changelog ==
+
+= 1.0.7 =
+* Security: Refactored search engine to prevent SQL injection vulnerabilities
+* Performance: Optimized SQL queries to utilize database indexes (removed LCASE/LEFT/RIGHT)
+* Improvement: Modernized PHP code (replaced deprecated 'var' with 'public')
 
 = 1.0.6 =
 * Fix: Escaping priority value in settings
