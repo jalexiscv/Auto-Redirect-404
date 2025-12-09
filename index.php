@@ -11,5 +11,5 @@ if(empty($domain)){
     return;
 }
 
-header('Location: ' . $domain, true, 301);
+header('Location: ' . esc_url_raw($domain), true, 301);
 exit();

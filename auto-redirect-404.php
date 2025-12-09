@@ -3,7 +3,7 @@
  * Plugin Name: Auto Redirect 404-301
  * Plugin URI:  https://github.com/jalexiscv
  * Description: Automatically Redirect any 404 page to a Similar Post based on the Title, Post Type & Taxonomy using 301 Redirects!
- * Version: 	1.0.9
+ * Version: 	1.1.0
  * Author: 		Jose Alexis Correa Valencia
  * Author URI: 	https://alterplex.net
  * License:     GPLv2 or later

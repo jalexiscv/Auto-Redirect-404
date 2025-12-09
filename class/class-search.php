@@ -48,6 +48,8 @@ class WP_404_Auto_Redirect_Search{
                 $args['keywords'] = array($args['keywords']);
             }
 
+            $where_score = array();
+
             foreach($args['keywords'] as $k){
                 
                 $strlen = strlen($k);
@@ -74,6 +76,10 @@ class WP_404_Auto_Redirect_Search{
                 $select_score[] = "IF(p.post_name LIKE %s, 1, 0)";
                 $query_params[] = '%' . $k . '%';
                 
+                // Optimization: WHERE Logic
+                $where_score[] = "p.post_name LIKE %s";
+                $query_params[] = '%' . $k . '%';
+                
             }
 
             $sql = "SELECT p.ID, (" . implode(' + ', $select_score) . ") AS score FROM " . $wpdb->posts . " AS p";
@@ -82,6 +88,11 @@ class WP_404_Auto_Redirect_Search{
                 $sql .= " INNER JOIN " . $wpdb->postmeta . " AS pm ON(p.ID = pm.post_id) WHERE p.post_status = 'publish' AND (pm.meta_key = 'ar404_no_redirect' AND pm.meta_value != '1') ";
             } else {
                 $sql .= " WHERE p.post_status = 'publish' ";
+            }
+            
+            // Optimization: Add WHERE Logic
+            if(!empty($where_score)){
+                 $sql .= " AND (" . implode(' OR ', $where_score) . ")";
             }
                 
             if($args['post_type'] != 'any' && $args['post_type'] != array('any')){
@@ -117,6 +128,7 @@ class WP_404_Auto_Redirect_Search{
             }
             
             $select_score = array();
+            $where_score = array();
 
             if(!is_array($args['keywords'])){
                 $args['keywords'] = array($args['keywords']);
@@ -139,6 +151,10 @@ class WP_404_Auto_Redirect_Search{
                 }
                 $select_score[] = "IF(t.slug LIKE %s, 1, 0)";
                 $query_params[] = '%' . $k . '%';
+                
+                // Optimization: WHERE Logic
+                $where_score[] = "t.slug LIKE %s";
+                $query_params[] = '%' . $k . '%';
             }
 
             $sql = "SELECT t.term_id, (" . implode(' + ', $select_score) . ") AS score FROM " . $wpdb->terms . " AS t";
@@ -149,6 +165,11 @@ class WP_404_Auto_Redirect_Search{
             }
             
             $sql .= " WHERE 1=1 ";
+            
+            // Optimization: Add WHERE Logic
+            if(!empty($where_score)){
+                 $sql .= " AND (" . implode(' OR ', $where_score) . ")";
+            }
 
             if($args['taxonomy'] != 'any' && $args['taxonomy'] != array('any')){
                 
@@ -178,7 +199,17 @@ class WP_404_Auto_Redirect_Search{
             
         }
         
+        // Check Cache
+        $cache_key = 'ar404_search_' . md5(serialize($args) . serialize($query['settings']));
+        $cache_group = 'ar404';
+        $result = wp_cache_get($cache_key, $cache_group);
+        
+        if($result !== false){
+            return $result;
+        }
+
         // Execute Prepared Query
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
         if(!empty($query_params)){
             $search = $wpdb->get_row($wpdb->prepare($sql, $query_params), 'ARRAY_A');
         } else {
@@ -206,6 +237,9 @@ class WP_404_Auto_Redirect_Search{
         if(isset($search['score']) && !empty($search['score'])){
             $result['score'] = (int) $search['score'];
         }
+        
+        // Set Cache
+        wp_cache_set($cache_key, $result, $cache_group, HOUR_IN_SECONDS);
         
         // Return Result
         return $result;

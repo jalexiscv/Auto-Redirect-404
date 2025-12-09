@@ -56,7 +56,7 @@ Engine: <?php echo esc_html($query['redirect']['engine']); ?><br />
 Details: <?php echo esc_html($query['redirect']['why']); ?></pre>
             
             <h3>Advanced:</h3>
-            <pre><?php print_r($query); ?></pre>
+            <pre><?php echo esc_html(print_r($query, true)); ?></pre>
         </div>
         
         <?php 
